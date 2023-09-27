@@ -245,3 +245,20 @@ select prod1.datos.pais from productos1 prod1;
       }' 
       )
   where codigo=1;
+  
+  --TRANSFORM
+  update productos1 set datos = json_transform(datos, set '$.poblacion'=90000) where codigo=1;
+  select datos from productos1;
+  
+  select json_transform(datos, set '$.poblacion'=1000) from productos1; --cambia valores al mostrarlo mas no en la base
+  select json_transform(datos, insert '$.tipo1'='tipo1') from productos1; --inserta un nuevo campo en el json, solo al mostrarlo mas no en la base
+  select json_transform(datos, append '$.telefonos'='99999999') from productos1 where codigo =3; --inserta un valor dentro del arreglo telefonos, solo al mostrarlo mas no en la base
+  
+  select json_transform(datos, insert '$.telefonos[0]'='999999999') from productos1; --inserta un valor dentro del arreglo telefonos en una posicion especifica al mostrarlo mas no en la base
+    select json_transform(datos, rename '$.poblacion'='pob') from productos1;--nombre de los atributos json al mostrarlo mas no en la base
+    select json_transform(datos, replace '$.poblacion'=1000) from productos1 where codigo = 1;
+      select json_transform(datos, remove '$.poblacion') from productos1 where codigo = 1;
+    select json_transform(datos, keep '$.poblacion') from productos1 where codigo = 1;
+    select json_transform(datos, set '$.poblacion'=1000,
+                                insert '$.direccion.codigo'=90901,
+                                rename '$.direccion.calle'='via') from productos1 where codigo = 1;
